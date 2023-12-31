@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { fadeInOnEnterAnimation, fadeOutOnLeaveAnimation ,jackInTheBoxOnEnterAnimation} from 'angular-animations';
 import { DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,13 +19,17 @@ export class AppComponent {
   notMayuri: boolean = false;
   datingForm: FormGroup;
   authForm: FormGroup;
+  contactForm: FormGroup;
   stepCount:number =0;
 setopacity: number = 0;
 ifNo:boolean = false;
 setBye:boolean = false;
 saidYes:boolean = false;
 ifNoCount:number = 0;
-  constructor(private fb: FormBuilder) {
+selectedDay: string | null = '14';
+selectedMonth: string | null = 'April';
+selectedYear: string | null = '2024';
+  constructor(private fb: FormBuilder,private http: HttpClient) {
     this.datingForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
@@ -31,9 +37,14 @@ ifNoCount:number = 0;
     this.authForm = this.fb.group({
       name: ['', Validators.required],
     });
-    for (let i = 14; i <= 20; i++) {
+    for (let i = 14; i <= 30; i++) {
 	this.days.push(i.toString());
       }
+      this.contactForm = this.fb.group({
+	email: ['', [Validators.required, Validators.email]],
+	message: ['', Validators.required],
+	// Add other form fields here
+      });
   }
 
   scheduleDate() {
@@ -76,11 +87,25 @@ ifNoCount:number = 0;
 	this.saidYes =true;
 	this.ifNo=false;
 	this.stepCount = 2;
+	this.submitForm();
   }
+  submitForm() {
+	const formsPreeEndpoint = 'https://formspree.io/f/xkndnodr';
+	const formData = {
+		name: `Date scheduled : ${this.selectedDay} - ${this.selectedMonth} - ${this.selectedYear}`,
+		email: 'test@example.com'
+	};
+	this.http.post(formsPreeEndpoint, formData).subscribe(
+	  (response) => {
+	    console.log('Form submitted successfully:', response);
+	  },
+	  (error) => {
+	    console.error('Error submitting form:', error);
+	  }
+	);
+}
 
- selectedDay: string | null = '14';
-  selectedMonth: string | null = 'April';
-  selectedYear: string | null = '2024';
+
 
   days: string[] = ['14','15']; // replace with your day options
   months: string[] = ['April']; // replace with your month options
@@ -88,5 +113,7 @@ ifNoCount:number = 0;
 
   thankYou () {
 	this.stepCount =3;
+	this.submitForm();
+
   }
 }

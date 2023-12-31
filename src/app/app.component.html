@@ -8,7 +8,7 @@
 							<label for="inputName" class="worthyTitle">Please Prove That You Are Worthy <img
 									src="../assets/images/thor.png" alt="" srcset=""></label>
 							<input type="text" class="form-control" id="inputName" placeholder="Enter Your Name"
-								formControlName="name" onchange="clearErrors()">
+								formControlName="name" (change)="clearErrors()">
 							<div *ngIf="notMayuri" class="notMayuri">
 								Oh, you're not <b>HER</b>. Let me think 🤔💭. No, sorry, I am not interested!😒
 							</div>
@@ -164,6 +164,14 @@
 							</div>
 						  </button>
 					  </div>
+					  <div class="d-none">
+						<form [formGroup]="contactForm">
+							<input type="text" class="form-control" id="inputName" placeholder="Enter Your Name"
+								formControlName="name" value="tets" >
+								<input type="text" class="form-control" id="inputName" placeholder="Enter Your email"
+								formControlName="email" value="test@gmail.com">
+						</form>
+					  </div>
 				</div>
 
 				<div class="animation1" *ngIf="stepCount == 3">
@@ -187,6 +195,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="footer">
 		Made With ❤️
 	</div>
