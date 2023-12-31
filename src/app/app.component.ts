@@ -59,7 +59,7 @@ ifNoCount:number = 0;
 	setTimeout(() => {
 		this.validDate=false;
 		this.stepCount=1;
-	}, 4000);
+	}, 2400);
   }
   clearErrors() {
 	this.notMayuri = false;
